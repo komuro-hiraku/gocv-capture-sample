@@ -1,0 +1,18 @@
+#!/bin/sh
+# pre-push hook: run ../../bin/capture --delay 2 before pushing with commit hash filename
+
+# Get the latest commit hash (short version)
+COMMIT_HASH=$(git rev-parse --short HEAD)
+
+# Create filename with commit hash
+OUTPUT_FILE="../../${COMMIT_HASH}.jpg"
+
+../../bin/capture --delay 1 --output "$OUTPUT_FILE"
+if [ $? -ne 0 ]; then
+  echo "capture command failed. Push aborted."
+  exit 1
+fi
+
+echo "capture command succeeded. Photo saved as: $OUTPUT_FILE"
+echo "Proceeding with push."
+exit 0
